@@ -34,21 +34,22 @@ function Accordion({data}) {
         <AccordionItem
           index={i}
           title={item.title}
-          text={item.text}
           key={item.title}
           currentlyOpen={currentlyOpen}
           setIsOpen={setIsOpen}
-        />
+        >
+          {item.text}
+        </AccordionItem>
       ))}
     </div>
   );
 }
 
-function AccordionItem({index, title, text, currentlyOpen, setIsOpen}) {
+function AccordionItem({index, title, currentlyOpen, setIsOpen, children}) {
   const isOpen = index === currentlyOpen;
 
   function handleToggle() {
-    setIsOpen(index);
+    setIsOpen(isOpen ? null /* to close it, if it is already open */ : index);
   }
 
   return (
@@ -56,7 +57,7 @@ function AccordionItem({index, title, text, currentlyOpen, setIsOpen}) {
       <p className='number'>{index < 9 ? `0${index + 1}` : index + 1}</p>
       <p className='title'>{title}</p>
       <p className='icon'>{isOpen ? '-' : '+'}</p>
-      {isOpen && <div className='content-box'>{text}</div>}
+      {isOpen && <div className='content-box'>{children}</div>}
     </div>
   );
 }
