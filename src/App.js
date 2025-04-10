@@ -1,5 +1,6 @@
 import './styles.css';
 import {useState} from 'react';
+import React from 'react';
 
 const faqs = [
   {
@@ -25,29 +26,34 @@ export default function App() {
 }
 
 function Accordion({data}) {
+  const [currentlyOpen, setIsOpen] = useState(null);
+
   return (
     <div className='accordion'>
       {data.map((item, i) => (
         <AccordionItem
-          num={i}
+          index={i}
           title={item.title}
           text={item.text}
-          key={item.title} // Truly unique, while index can be double in certain cases
+          key={item.title}
+          currentlyOpen={currentlyOpen}
+          setIsOpen={setIsOpen}
         />
       ))}
     </div>
   );
 }
 
-function AccordionItem({num, title, text}) {
-  const [isOpen, setisOpen] = useState(false);
+function AccordionItem({index, title, text, currentlyOpen, setIsOpen}) {
+  const isOpen = index === currentlyOpen;
+
   function handleToggle() {
-    setisOpen((isOpen) => !isOpen);
+    setIsOpen(index);
   }
 
   return (
     <div className={`item ${isOpen ? 'open' : ''}`} onClick={handleToggle}>
-      <p className='number'>{num < 9 ? `0${num + 1}` : num + 1}</p>
+      <p className='number'>{index < 9 ? `0${index + 1}` : index + 1}</p>
       <p className='title'>{title}</p>
       <p className='icon'>{isOpen ? '-' : '+'}</p>
       {isOpen && <div className='content-box'>{text}</div>}
